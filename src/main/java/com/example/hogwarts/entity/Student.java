@@ -3,6 +3,7 @@ package com.example.hogwarts.entity;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+
 @Entity
 @Table(name = "student")
 public class Student {
@@ -14,15 +15,16 @@ public class Student {
 
     int age;
 
-
-
+    private String avatarUrl;
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
-    public Student(long id, String name, int age) {
+
+    public Student(long id, String name, int age, String avatarUrl) {
         this.id = id;
         this.name = name;
         this.age = age;
+        this.avatarUrl = avatarUrl;
     }
 
     public Student() {
@@ -81,5 +83,13 @@ public class Student {
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

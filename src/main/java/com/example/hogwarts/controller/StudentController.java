@@ -2,7 +2,9 @@ package com.example.hogwarts.controller;
 
 import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.service.StudentService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 
@@ -47,4 +49,8 @@ public class StudentController {
         return studentService.ageBetween(min,max);
     }
 
+    @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Student uploadAvatar(@PathVariable long id,@RequestParam("avatar") MultipartFile multipartFile){
+        return studentService.uploadAvatar(id,multipartFile);
+    }
 }
