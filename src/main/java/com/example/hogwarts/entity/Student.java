@@ -13,7 +13,7 @@ public class Student {
 
     private String name;
 
-    int age;
+    private int age;
 
     private String avatarUrl;
     @ManyToOne
