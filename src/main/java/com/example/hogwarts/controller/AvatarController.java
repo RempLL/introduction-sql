@@ -1,13 +1,13 @@
 package com.example.hogwarts.controller;
 
+import com.example.hogwarts.entity.Avatar;
+import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.service.AvatarService;
 import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/avatars")
@@ -29,6 +29,10 @@ public class AvatarController {
         return build(avatarService.getFromFs(id));
     }
 
+    @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Student uploadAvatar(@PathVariable long id, @RequestParam("avatar") MultipartFile multipartFile){
+        return avatarService.uploadAvatar(id,multipartFile);
+    }
 
     private ResponseEntity<byte[]> build(Pair<byte[],String> pair){
         byte[] data = pair.getFirst();

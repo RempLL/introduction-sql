@@ -3,6 +3,7 @@ package com.example.hogwarts.service;
 import com.example.hogwarts.entity.Avatar;
 import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.repository.AvatarRepository;
+import com.example.hogwarts.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
 
     private final Path pathToAvatarDir;
+    private final StudentRepository studentRepository;
 
-    public AvatarService(AvatarRepository avatarRepository, @Value("${path.to.avatar.dir}") String pathToAvatarDir) {
+    public AvatarService(AvatarRepository avatarRepository, @Value("${path.to.avatar.dir}") String pathToAvatarDir, StudentRepository studentRepository) {
         this.avatarRepository = avatarRepository;
         this.pathToAvatarDir = Path.of(pathToAvatarDir);
+        this.studentRepository = studentRepository;
     }
 
     public Avatar create(Student student, MultipartFile multipartFile) {
@@ -67,4 +70,11 @@ public class AvatarService {
         }
     }
 
+    public Student uploadAvatar(long id, MultipartFile multipartFile) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow();
+        create(student,multipartFile);
+        student.setAvatarUrl("http://localhost:8080/avatars/" + student.getId()+"/from-db");
+        return student;
+    }
 }

@@ -176,8 +176,6 @@ public class StudentControllerTests {
 
     @Test
     public void ageBetween() throws Exception {
-
-
         Student student = new Student();
         student.setId(id);
         student.setName(name);
@@ -190,38 +188,6 @@ public class StudentControllerTests {
         when(studentRepository.findStudentsByAgeBetween(eq(min), eq(max))).thenReturn(students);
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/collect?min=2&max=30")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(result -> List.of(students));
-    }
-    @Test
-    public void uploadAvatar() throws Exception {
-        JSONObject studentObject = new JSONObject();
-        studentObject.put("name", name);
-        studentObject.put("age", age);
-
-        Student student = new Student();
-        student.setId(id);
-        student.setName(name);
-        student.setAge(age);
-
-        byte[] data = {123};
-        Avatar avatar = new Avatar();
-        avatar.setId(1L);
-        avatar.setData(data);
-        avatar.setFilePath("as");
-        avatar.setFileSize(12l);
-        avatar.setMediaType("da");
-
-        List<Student> students = List.of(student);
-
-        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
-        when(avatarService.create(any(),any())).thenReturn(avatar);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/student/2/avatar")
-                        .content(studentObject.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(result -> List.of(students));

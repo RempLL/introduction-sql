@@ -12,11 +12,8 @@ import java.util.Collection;
 public class StudentService {
     private final StudentRepository studentRepository;
 
-    private final AvatarService avatarService;
-
-    public StudentService(StudentRepository studentRepository, AvatarService avatarService) {
+    public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.avatarService = avatarService;
     }
 
     public Student add(Student student) {
@@ -43,14 +40,5 @@ public class StudentService {
 
     public Collection<Student> ageBetween(int min,int max){
         return studentRepository.findStudentsByAgeBetween(min,max);
-    }
-
-    public Student uploadAvatar(long id, MultipartFile multipartFile) {
-        Student student = studentRepository.findById(id)
-                        .orElseThrow();
-        Avatar avatar = avatarService.create(student,multipartFile);
-        student.setAvatarUrl("http://localhost:8080/avatars/" + avatar.getId()+"/from-db");
-        return student;
-
     }
 }

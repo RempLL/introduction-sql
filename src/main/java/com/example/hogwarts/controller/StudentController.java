@@ -49,8 +49,5 @@ public class StudentController {
         return studentService.ageBetween(min,max);
     }
 
-    @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Student uploadAvatar(@PathVariable long id,@RequestParam("avatar") MultipartFile multipartFile){
-        return studentService.uploadAvatar(id,multipartFile);
-    }
+
 }
