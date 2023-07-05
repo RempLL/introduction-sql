@@ -2,11 +2,10 @@ package com.example.hogwarts.controller;
 
 import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.service.StudentService;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("student")
@@ -49,5 +48,18 @@ public class StudentController {
         return studentService.ageBetween(min,max);
     }
 
+    @GetMapping("/count")
+    public int getCountStudent(){
+        return studentService.getCountStudent();
+    }
 
+    @GetMapping("avgAge")
+    public int getAvgAge(){
+        return studentService.getAvgAge();
+    }
+
+    @GetMapping("lastFive")
+    public List<Student> getLastFive(){
+        return studentService.getLastFive();
+    }
 }

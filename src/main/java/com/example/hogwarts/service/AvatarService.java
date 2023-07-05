@@ -5,7 +5,9 @@ import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.repository.AvatarRepository;
 import com.example.hogwarts.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -76,5 +79,14 @@ public class AvatarService {
         create(student,multipartFile);
         student.setAvatarUrl("http://localhost:8080/avatars/" + student.getId()+"/from-db");
         return student;
+    }
+
+    public List<Avatar> getAll() {
+        return avatarRepository.getAll();
+    }
+
+    public List<Avatar> getPag(Integer pageNum,Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1,pageSize);
+        return avatarRepository.findAll(pageRequest).getContent();
     }
 }

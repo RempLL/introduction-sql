@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/avatars")
 public class AvatarController {
@@ -32,6 +34,17 @@ public class AvatarController {
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Student uploadAvatar(@PathVariable long id, @RequestParam("avatar") MultipartFile multipartFile){
         return avatarService.uploadAvatar(id,multipartFile);
+    }
+
+    @GetMapping("/getAll")
+    public List<Avatar> getAll() {
+        return avatarService.getAll();
+    }
+
+    @GetMapping("/getPag")
+    public ResponseEntity<List<Avatar>> getPag(@RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer pageSize) {
+        List<Avatar> avatars = avatarService.getPag(pageNum,pageSize);
+        return ResponseEntity.ok(avatars);
     }
 
     private ResponseEntity<byte[]> build(Pair<byte[],String> pair){
