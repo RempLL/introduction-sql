@@ -4,6 +4,8 @@ import com.example.hogwarts.entity.Avatar;
 import com.example.hogwarts.entity.Student;
 import com.example.hogwarts.repository.AvatarRepository;
 import com.example.hogwarts.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class AvatarService {
     private final AvatarRepository avatarRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AvatarService.class);
     private final Path pathToAvatarDir;
     private final StudentRepository studentRepository;
 
@@ -52,14 +55,17 @@ public class AvatarService {
             avatar.setData(data);
             avatar.setStudent(student);
             avatar.setFilePath(pathToAvatar.toString());
+            LOGGER.info("Was invoked method for create avatar");
             return avatarRepository.save(avatar);
         } catch (IOException e) {
+            LOGGER.error("RuntimeException");
             throw new RuntimeException(e);
         }
     }
 
 
     public Pair<byte[],String> getFromDb(long id){
+        LOGGER.info("Was invoked method for getFromDb avatar with id {}",id);
         Avatar avatar = avatarRepository.findByStudent_id(id).orElseThrow();
         return Pair.of(avatar.getData(),avatar.getMediaType());
     }
@@ -67,8 +73,10 @@ public class AvatarService {
     public Pair<byte[],String> getFromFs(long id){
         try {
             Avatar avatar = avatarRepository.findByStudent_id(id).orElseThrow();
+            LOGGER.info("Was invoked method for getFromFs avatar with id {}",id);
             return Pair.of(Files.readAllBytes(Path.of(avatar.getFilePath())),avatar.getMediaType());
         } catch (IOException e) {
+            LOGGER.error("RuntimeException");
             throw new RuntimeException(e);
         }
     }
@@ -78,14 +86,17 @@ public class AvatarService {
                 .orElseThrow();
         create(student,multipartFile);
         student.setAvatarUrl("http://localhost:8080/avatars/" + student.getId()+"/from-db");
+        LOGGER.info("Was invoked method for uploadAvatar avatar with id {}",id);
         return student;
     }
 
     public List<Avatar> getAll() {
+        LOGGER.info("Was invoked method for getAll avatar");
         return avatarRepository.getAll();
     }
 
     public List<Avatar> getPag(Integer pageNum,Integer pageSize) {
+        LOGGER.info("Was invoked method for getPag avatar");
         PageRequest pageRequest = PageRequest.of(pageNum - 1,pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
