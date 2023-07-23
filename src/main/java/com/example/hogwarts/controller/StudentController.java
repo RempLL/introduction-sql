@@ -72,4 +72,14 @@ public class StudentController {
     public double avgAgeStream(){
         return studentService.avgAgeStream();
     }
+
+    @GetMapping("task1")
+    public void task1(){
+        studentService.taskThread();
+    }
+
+    @GetMapping("task2")
+    public void task2(){
+        studentService.taskThreadSync();
+    }
 }

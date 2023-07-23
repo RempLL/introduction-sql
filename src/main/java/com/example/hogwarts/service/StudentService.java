@@ -26,7 +26,7 @@ public class StudentService {
     }
 
     public Student get(long id) {
-        LOGGER.info("Was invoked method for get student with id {}",id);
+        LOGGER.info("Was invoked method for get student with id {}", id);
         return studentRepository.findById(id).get();
     }
 
@@ -36,20 +36,20 @@ public class StudentService {
     }
 
     public Student del(long id) {
-        LOGGER.info("Was invoked method for delete student with id {}",id);
-        Student student =studentRepository.findById(id).get();
+        LOGGER.info("Was invoked method for delete student with id {}", id);
+        Student student = studentRepository.findById(id).get();
         studentRepository.deleteById(id);
         return student;
     }
 
     public Collection<Student> ageCollect(int age) {
-        LOGGER.info("Was invoked method for get student with age {}",age);
+        LOGGER.info("Was invoked method for get student with age {}", age);
         return studentRepository.findAllByAge(age);
     }
 
-    public Collection<Student> ageBetween(int min,int max){
-        LOGGER.info("Was invoked method for get student between min {}, max {}",min,max);
-        return studentRepository.findStudentsByAgeBetween(min,max);
+    public Collection<Student> ageBetween(int min, int max) {
+        LOGGER.info("Was invoked method for get student between min {}, max {}", min, max);
+        return studentRepository.findStudentsByAgeBetween(min, max);
     }
 
     public int getCountStudent() {
@@ -80,5 +80,52 @@ public class StudentService {
                 .mapToDouble(Student::getAge)
                 .average()
                 .orElseThrow();
+    }
+
+    public void taskThread() {
+        printStudent(studentRepository.findAll().get(0));
+        printStudent(studentRepository.findAll().get(1));
+
+        new Thread(() -> {
+            printStudent(studentRepository.findAll().get(2));
+            printStudent(studentRepository.findAll().get(3));
+        }).start();
+
+        new Thread(() -> {
+            printStudent(studentRepository.findAll().get(4));
+            printStudent(studentRepository.findAll().get(5));
+        }).start();
+    }
+
+    private void printStudent(Student student) {
+        LOGGER.info(student.toString());
+    }
+
+    public void taskThreadSync() {
+        LOGGER.info(studentRepository.findAll().toString());
+
+        printStudentSync(studentRepository.findAll().get(0));
+        printStudentSync(studentRepository.findAll().get(1));
+
+        Thread a = new Thread(() -> {
+            printStudentSync(studentRepository.findAll().get(2));
+            printStudentSync(studentRepository.findAll().get(3));
+        });
+        a.start();
+        try {
+            a.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        Thread b = new Thread(() -> {
+            printStudentSync(studentRepository.findAll().get(4));
+            printStudentSync(studentRepository.findAll().get(5));
+        });
+        b.start();
+    }
+
+    private synchronized void printStudentSync(Student student) {
+        printStudent(student);
     }
 }
