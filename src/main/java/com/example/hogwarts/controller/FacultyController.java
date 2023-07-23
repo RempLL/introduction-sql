@@ -45,4 +45,13 @@ public class FacultyController {
         return facultyService.colorOrNameCollect(color,name);
     }
 
+    @GetMapping("longest-faculty")
+    public String longestFaculty(){
+        return facultyService.longestFaculty();
+    }
+
+    @GetMapping("int-sum")
+    public Integer intSum(){
+        return facultyService.intSum();
+    }
 }

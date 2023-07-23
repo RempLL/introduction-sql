@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -48,5 +50,19 @@ public class FacultyService {
     public Collection<Faculty> colorOrNameCollect(String color, String name) {
         LOGGER.info("Was invoked method for colorOrNameCollect faculty");
         return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(color,name);
+    }
+
+    public String longestFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length))
+                .get();
+    }
+
+    public Integer intSum(){
+        return Stream.iterate(1, a -> a +1)
+                .parallel()
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b );
     }
 }

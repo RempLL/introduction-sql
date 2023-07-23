@@ -24,6 +24,10 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="avatar_url" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+
             <column name="faculty_id" type="BIGINT">
                 <constraints nullable="true"/>
             </column>
