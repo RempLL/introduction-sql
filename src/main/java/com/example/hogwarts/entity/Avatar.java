@@ -3,6 +3,7 @@ package com.example.hogwarts.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "avatar")
 public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
